@@ -30,7 +30,7 @@ My statistics is as shown :
 
 | Task List | Description | Status |
 | :-:       | :-:         | :-:    |
-| Task-00   | [Install Linux/homebrew for Mac](https://github.com/harinandanaharilal/amfoss-tasks/blob/d49fb4e16eec2fb53ec6911e952a67671aa7447e/Task%2000) | Completed |
+| Task-00   | [Install Linux/homebrew for Mac](https://github.com/harinandanaharilal/amfoss-tasks/tree/c6cde1d83f5126902d152f654940e74bd6169c48/Task00) | Completed |
 | Task-01   | [Prologue – The Logbook of the Grand Line]() | Not attempted |
 | Task-02   | [The Grand Line Restoration Initiative]() | Not attempted |
 | Task-03   | [Leetcode Challenge]() | Not attempted |
