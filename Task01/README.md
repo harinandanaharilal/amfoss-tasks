@@ -3,7 +3,7 @@
 # Level 1
 
 <p>The first level was to find the real devil fruit among the replicas ,it took place in Loguetown .The task was pretty straightforward but I realized it only later.
-A few commands like cd ,ls -a and ./eat.sh was repeatedly used.By trial and error I found that the real devil fruit was in sector C ,devil_fruit_6.txt.I am a beginner 
+A few commands like cd ,ls -a and ./eat.sh was used.First I cloned the git repository using clone git and pasting the https path ,then used cd to get into that folder ,again multiple cd to get into Loguetown folder,There i found multiple files when i used ls -a .I had cloned the repo the first day the task was released so even after i tried running ./eat.sh multiple times nothing came up so i looked into the code in eat.sh file ,tried changing it and couldn't revert it back,I tried this after a few days later so i cloned it again and then when i used ./eat.sh it worked .By trial and error I found that the real devil fruit was in sector C ,devil_fruit_6.txt.I am a beginner 
 when it comes to coding and other tech related activities so I took a lot of time with this level.As for my references for doing this was the git doc provided in the amfoss 
 workshop .I completed level 1 on 26/07/2026.</p>
 <img width="1710" height="1107" alt="Screenshot 2026-07-26 at 11 15 37 AM" src="https://github.com/user-attachments/assets/1113119d-0ca9-4935-8684-940a5a931884" />
@@ -11,7 +11,11 @@ workshop .I completed level 1 on 26/07/2026.</p>
 
 # Level 2
 
-<p>Level 2 was about getting a transmission code and a new thing came up git branch -a and git switch . I got stuck on this for the past 3 days,it wasnt because i didnt get the two log file.I did get it but whenever i run diff between the files nothing happened ,so i started looking through it multiple times ,I know i shouldn't use ai but i used it to know if there was anything wrong with that line,I think there was something wrong.</p>
+<p>Level 2 was about getting a transmission code and a new thing came up git branch -a and git switch .I began by switching the branch into whiskey peak investigation in order to find the transmission code.Then I used ls -a to list all the files in it and used cd •baroque works cache and again used ls and found a unlock_vault.sh file ,I tried running it and it showed access denied put in password so i went opened the file in vs code and saw that the awakening signature i got from the last level "ONE_PIECE{GITO_GITO_NO_AWAKENING}" was the password and i put it in and then again ran the file and it gave me two log fils but no code so i was at it for days trying to find 
+ what was wrong, it kept coming like this:</p>
+ <p>sed: 2: "bounty_hunter_feed.log
+": undefined label 'ounty_hunter_feed.1og'</p>
+<p>So opened the file in vs code and looked at that line ,i tried google,tried recloning the repository but nothing worked .I even tried ai but it didn't know what was wrong.so i was just obssesing over that line in vs code ,i clicked it and vs code showed an option to modify it so i clicked it and it changed"/" to this "|" and when i ran it again it worked .At last I got the transmission code.</p>
 <img width="856" height="98" alt="Screenshot 2026-07-29 at 3 01 12 AM" src="https://github.com/user-attachments/assets/b951b97a-22a9-4a12-9ad9-9dfdbf14424c" />
 <p>The part after the sed ,i felt like something was there so i went through the code of unlock_vault.sh and on the sed line vs code suggested a modify or not option so i clicked modify so it changed "/" to this "|" and after that when i ran diff i got the transmission code.Maybe i changed it before or something I am not sure if it was an error i did on my part.Still I got the code.</p>
 <img width="1710" height="1107" alt="Screenshot 2026-07-28 at 9 57 40 PM" src="https://github.com/user-attachments/assets/18e2369d-855d-4744-b395-40a25e84f146" />
