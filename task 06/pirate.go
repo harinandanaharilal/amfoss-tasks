@@ -10,27 +10,24 @@ import (
 	"text/tabwriter"
 )
 
-// Process represents a pirate crew waiting for CPU (Grand Line dock) time.
+
 type Process struct {
 	ID         string
 	Arrival    int
 	Burst      int
-	Remaining  int // used only by Round Robin
+	Remaining  int 
 	Completion int
 	TurnAround int
 	Waiting    int
 }
 
-// GanttSegment represents one block of execution on the timeline.
+
 type GanttSegment struct {
 	ID    string
 	Start int
 	End   int
 }
 
-// ---------------------------------------------------------------------
-// Input helpers
-// ---------------------------------------------------------------------
 
 func readString(reader *bufio.Reader, prompt string) string {
 	fmt.Print(prompt)
@@ -63,18 +60,12 @@ func readPositiveInt(reader *bufio.Reader, prompt string) int {
 	}
 }
 
-// ---------------------------------------------------------------------
-// Scheduling algorithms
-// Each returns a slice of completed Processes (with computed metrics)
-// and the Gantt chart segments in execution order.
-// ---------------------------------------------------------------------
 
-// scheduleFCFS: First Come First Serve.
 func scheduleFCFS(procs []Process) ([]Process, []GanttSegment) {
 	ps := make([]Process, len(procs))
 	copy(ps, procs)
 
-	// Stable sort by arrival time; ties keep original input order.
+	
 	sort.SliceStable(ps, func(i, j int) bool {
 		return ps[i].Arrival < ps[j].Arrival
 	})
@@ -84,7 +75,7 @@ func scheduleFCFS(procs []Process) ([]Process, []GanttSegment) {
 
 	for i := range ps {
 		if currentTime < ps[i].Arrival {
-			currentTime = ps[i].Arrival // CPU idle until this crew arrives
+			currentTime = ps[i].Arrival 
 		}
 		start := currentTime
 		end := start + ps[i].Burst
@@ -100,7 +91,7 @@ func scheduleFCFS(procs []Process) ([]Process, []GanttSegment) {
 	return ps, gantt
 }
 
-// scheduleSJF: Shortest Job First, Non-Preemptive.
+
 func scheduleSJF(procs []Process) ([]Process, []GanttSegment) {
 	ps := make([]Process, len(procs))
 	copy(ps, procs)
@@ -125,7 +116,7 @@ func scheduleSJF(procs []Process) ([]Process, []GanttSegment) {
 		}
 
 		if idx == -1 {
-			// No crew has arrived yet -> fast-forward to the next arrival.
+			
 			next := -1
 			for i := range ps {
 				if !done[i] && (next == -1 || ps[i].Arrival < next) {
@@ -153,7 +144,7 @@ func scheduleSJF(procs []Process) ([]Process, []GanttSegment) {
 	return ps, gantt
 }
 
-// scheduleRR: Round Robin with the given time quantum.
+
 func scheduleRR(procs []Process, quantum int) ([]Process, []GanttSegment) {
 	ps := make([]Process, len(procs))
 	copy(ps, procs)
@@ -161,19 +152,19 @@ func scheduleRR(procs []Process, quantum int) ([]Process, []GanttSegment) {
 		ps[i].Remaining = ps[i].Burst
 	}
 
-	// Sort by arrival so the initial queue fill-in is easy and deterministic.
+	
 	sort.SliceStable(ps, func(i, j int) bool {
 		return ps[i].Arrival < ps[j].Arrival
 	})
 
 	n := len(ps)
-	added := make([]bool, n) // has this process index ever entered the queue?
+	added := make([]bool, n) 
 	var queue []int
 	currentTime := ps[0].Arrival
 	completed := 0
 	var gantt []GanttSegment
 
-	// Adds any process that has arrived by currentTime and isn't queued yet.
+	
 	addArrivals := func() {
 		for i := 0; i < n; i++ {
 			if !added[i] && ps[i].Arrival <= currentTime {
@@ -187,7 +178,7 @@ func scheduleRR(procs []Process, quantum int) ([]Process, []GanttSegment) {
 
 	for completed < n {
 		if len(queue) == 0 {
-			// Nothing ready to run -> jump forward to the next arrival.
+			
 			next := -1
 			for i := 0; i < n; i++ {
 				if !added[i] && (next == -1 || ps[i].Arrival < next) {
@@ -213,8 +204,7 @@ func scheduleRR(procs []Process, quantum int) ([]Process, []GanttSegment) {
 
 		gantt = append(gantt, GanttSegment{ID: ps[idx].ID, Start: start, End: end})
 
-		// Important ordering rule: newly arrived crews join the queue
-		// BEFORE the just-run (but unfinished) crew goes back to the tail.
+		
 		addArrivals()
 
 		if ps[idx].Remaining > 0 {
@@ -230,9 +220,6 @@ func scheduleRR(procs []Process, quantum int) ([]Process, []GanttSegment) {
 	return ps, gantt
 }
 
-// ---------------------------------------------------------------------
-// Display helpers
-// ---------------------------------------------------------------------
 
 func centerText(s string, width int) string {
 	if len(s) >= width {
@@ -315,9 +302,6 @@ func printTable(ps []Process) {
 	fmt.Printf("Average Turnaround Time : %.2f\n", float64(totalTAT)/n)
 }
 
-// ---------------------------------------------------------------------
-// Main
-// ---------------------------------------------------------------------
 
 func printBanner() {
 	fmt.Println("=================================================")
