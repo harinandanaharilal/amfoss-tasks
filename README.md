@@ -36,7 +36,7 @@ My statistics is as shown :
 | Task-03   | [Leetcode Challenge](https://github.com/harinandanaharilal/amfoss-tasks/tree/ba8b7d31a0c48f055fa3bcbb8bd2f91514082cfd/Task03) | Completed |
 | Task-04   | [The Bull & The Bear](https://github.com/harinandanaharilal/amfoss-tasks/tree/ba8b7d31a0c48f055fa3bcbb8bd2f91514082cfd/Task%2004)  | Completed|
 | Task-05   | [Grand Line Guardian]() | Not attempted |
-| Task-06   | [Pirate King's Scheduler]() | Not attempted |
+| Task-06   | [Pirate King's Scheduler](https://github.com/harinandanaharilal/amfoss-tasks/tree/295d3864c42cda66009cb5efb480872a6e65ef5f/task%2006) | Completed |
 | Task-07   | [Dank Memer Discord Bot]() | Not attempted |
 | Task-08   | [Operation Pixel Merge]() | Not attempted |
 | Task-09   | [Matrix Multiplication Showdown]()| Not attempted |
