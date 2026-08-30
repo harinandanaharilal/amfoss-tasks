@@ -19,7 +19,7 @@ def load_fragmented_images(image_folder):
         file_pattern = os.path.join(image_folder, "*.jpeg")
         filepaths = glob.glob(file_pattern)
 
-    # Sort numerically by row number
+    
     filepaths = sorted(filepaths, key=extract_row_number)
     
     images = []
@@ -43,19 +43,19 @@ def reassemble_imperial_transmission(fragment_folder, output_path):
         print("[Error] No transmission fragments detected.")
         return
 
-    # Vertically stack all equal-height slices
+    
     canvas_np = np.vstack(fragments)
 
-    # Convert BGR (OpenCV) to RGB (Pillow)
+    
     canvas_rgb = cv2.cvtColor(canvas_np, cv2.COLOR_BGR2RGB)
     reconstructed_img = Image.fromarray(canvas_rgb)
 
-    # Save reconstructed output
+    
     reconstructed_img.save(output_path)
     print(f"\n[Success] Reconstruction complete! Output saved as: {output_path}")
 
 if __name__ == "__main__":
-    # Automatically get the absolute folder path where pixel.py is located
+    
     SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
     OUTPUT_FILE = os.path.join(SCRIPT_DIR, "secret_imperial_message.jpg")
     
