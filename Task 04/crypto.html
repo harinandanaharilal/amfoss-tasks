@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto Tracker</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root[data-theme="dark"] {
+      --bg-body: #0b0e14;
+      --bg-card: #121824;
+      --bg-hover: #1b2234;
+      --text-main: #f0f4f8;
+      --text-muted: #64748b;
+      --border-color: #1e293b;
+      --accent-green: #10b981;
+      --accent-red: #ac1d1d;
+      --accent-blue: #3b82f6;
+      --star-active: #f59e0b;
+    }
+
+    :root[data-theme="light"] {
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-hover: #f1f5f9;
+      --text-main: #0f172a;
+      --text-muted: #94a3b8;
+      --border-color: #e2e8f0;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --accent-blue: #2563eb;
+      --star-active: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg-body); color: var(--text-main); padding: 2rem 1rem; }
+
+    .app-container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; }
+
+    /* Top Navigation Header */
+    .top-header { display: flex; justify-content: space-between; align-items: center; }
+    .app-title { font-size: 1.75rem; font-weight: 700; text-align: center; flex: 1; margin-left: 80px; }
+    .theme-btn { background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+
+    /* Controls Bar */
+    .controls-bar { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .search-box { position: relative; flex: 1; min-width: 250px; }
+    .search-box input { width: 100%; background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 0.75rem 1rem 0.75rem 2.5rem; border-radius: 8px; outline: none; }
+    .search-box i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    .filter-tabs { display: flex; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px; gap: 4px; }
+    .tab-btn { background: none; border: none; color: var(--text-muted); padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    .tab-btn.active { background: var(--bg-hover); color: var(--text-main); }
+
+    /* Chart Module */
+    .chart-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
+    .chart-info { display: flex; align-items: center; gap: 12px; }
+    .chart-info img { width: 36px; height: 36px; }
+    .time-group { display: flex; gap: 4px; background: var(--bg-body); padding: 4px; border-radius: 6px; border: 1px solid var(--border-color); }
+    .time-btn { background: none; border: none; color: var(--text-muted); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
+    .time-btn.active { background: var(--bg-hover); color: var(--text-main); }
+    .chart-wrapper { height: 260px; width: 100%; position: relative; }
+
+    /* Table Styling matching UI model */
+    .table-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: 1rem; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
+    th { color: var(--text-muted); font-weight: 600; font-size: 0.85rem; }
+    tr.selected { background-color: var(--bg-hover); }
+    tr:hover { background-color: var(--bg-hover); cursor: pointer; }
+    
+    .coin-cell { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+    .coin-cell img { width: 22px; height: 22px; }
+    .star-icon { color: var(--text-muted); margin-right: 8px; cursor: pointer; }
+    .star-icon.active { color: var(--star-active); }
+
+    .positive { color: var(--accent-green); }
+    .negative { color: var(--accent-red); }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header class="top-header">
+      <h1 class="app-title">Crypto Tracker</h1>
+      <button class="theme-btn" id="themeToggle"><i class="fa-solid fa-moon"></i> Theme</button>
+    </header>
+
+    <div class="controls-bar">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Search crypto...">
+      </div>
+      <div class="filter-tabs">
+        <button class="tab-btn active" id="tabAll">All Coins</button>
+        <button class="tab-btn" id="tabWishlist">Wishlist (<span id="favCount">0</span>)</button>
+      </div>
+    </div>
+
+    <section class="chart-card">
+      <div class="chart-header">
+        <div class="chart-info">
+          <img id="cIcon" src="" alt="Icon">
+          <div>
+            <h2 id="cName">Select Asset</h2>
+            <p><span id="cPrice">$0.00</span> <span id="cChange" class="positive">0.00%</span></p>
+          </div>
+        </div>
+        <div class="time-group">
+          <button class="time-btn active" data-time="24H">24H</button>
+          <button class="time-btn" data-time="1W">1W</button>
+          <button class="time-btn" data-time="1M">1M</button>
+          <button class="time-btn" data-time="1Y">1Y</button>
+        </div>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="mainChart"></canvas>
+      </div>
+    </section>
+
+    <section class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Coin</th>
+            <th>Price</th>
+            <th>Market Cap</th>
+            <th>24h %</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <script>
+    const dataset = [
+      {"id":"bitcoin","symbol":"btc","name":"Bitcoin","image":"https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400","current_price":78891,"market_cap":1583935014784,"market_cap_rank":1,"price_change_percentage_24h":1.50},
+      {"id":"ethereum","symbol":"eth","name":"Ethereum","image":"https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628","current_price":2474.06,"market_cap":298537320369,"market_cap_rank":2,"price_change_percentage_24h":1.55},
+      {"id":"tether","symbol":"usdt","name":"Tether","image":"https://coin-images.coingecko.com/coins/images/325/large/Tether.png?1696501661","current_price":0.99992,"market_cap":183395677993,"market_cap_rank":3,"price_change_percentage_24h":-0.01},
+      {"id":"binancecoin","symbol":"bnb","name":"BNB","image":"https://coin-images.coingecko.com/coins/images/825/large/bnb-icon2_2x.png?1696501970","current_price":699,"market_cap":93085881591,"market_cap_rank":4,"price_change_percentage_24h":1.52},
+      {"id":"ripple","symbol":"xrp","name":"XRP","image":"https://coin-images.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png?1696501442","current_price":1.41,"market_cap":88210393157,"market_cap_rank":5,"price_change_percentage_24h":1.29},
+      {"id":"usd-coin","symbol":"usdc","name":"USDC","image":"https://coin-images.coingecko.com/coins/images/6319/large/USDC.png?1769615602","current_price":0.999876,"market_cap":73973577485,"market_cap_rank":6,"price_change_percentage_24h":-0.01},
+      {"id":"solana","symbol":"sol","name":"Solana","image":"https://coin-images.coingecko.com/coins/images/4128/large/solana.png?1718769756","current_price":107.01,"market_cap":62625784345,"market_cap_rank":7,"price_change_percentage_24h":3.06},
+      {"id":"tron","symbol":"trx","name":"TRON","image":"https://coin-images.coingecko.com/coins/images/1094/large/photo_2026-04-13_09-59-16.png?1776048311","current_price":0.340688,"market_cap":32339243411,"market_cap_rank":8,"price_change_percentage_24h":0.67},
+      {"id":"figure-heloc","symbol":"figr_heloc","name":"Figure Heloc","image":"https://coin-images.coingecko.com/coins/images/68480/large/figure.png?1755863954","current_price":1,"market_cap":21815005602,"market_cap_rank":9,"price_change_percentage_24h":-3.81},
+      {"id":"hyperliquid","symbol":"hype","name":"Hyperliquid","image":"https://coin-images.coingecko.com/coins/images/50882/large/hyperliquid.jpg?1729431300","current_price":83.85,"market_cap":18652046945,"market_cap_rank":10,"price_change_percentage_24h":2.55},
+      {"id":"zcash","symbol":"zec","name":"Zcash","image":"https://coin-images.coingecko.com/coins/images/486/large/Brandmark-Yellow_%281%29.png?1785810558","current_price":850.17,"market_cap":14372777974,"market_cap_rank":11,"price_change_percentage_24h":4.60},
+      {"id":"dogecoin","symbol":"doge","name":"Dogecoin","image":"https://coin-images.coingecko.com/coins/images/5/large/dogecoin.png?1696501409","current_price":0.085556,"market_cap":13323810984,"market_cap_rank":12,"price_change_percentage_24h":0.75},
+      {"id":"rain","symbol":"rain","name":"Rain","image":"https://coin-images.coingecko.com/coins/images/69134/large/Rain_logo_1_.png?1762952191","current_price":0.01745801,"market_cap":12381966719,"market_cap_rank":13,"price_change_percentage_24h":-0.91},
+      {"id":"usds","symbol":"usds","name":"USDS","image":"https://coin-images.coingecko.com/coins/images/39926/large/usds.webp?1726666683","current_price":1,"market_cap":9832569099,"market_cap_rank":14,"price_change_percentage_24h":-0.00},
+      {"id":"monero","symbol":"xmr","name":"Monero","image":"https://coin-images.coingecko.com/coins/images/69/large/monero_logo.png?1696501460","current_price":506.93,"market_cap":9538082721,"market_cap_rank":15,"price_change_percentage_24h":9.62}
+    ];
+
+    let selectedCoin = dataset[0];
+    let activeTimeframe = '24H';
+    let filterTab = 'all';
+    let wishlist = JSON.parse(localStorage.getItem('wishlist_items')) || [];
+    let chartInstance = null;
+
+    const fmtPrice = v => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: v < 1 ? 4 : 0 }).format(v);
+    const fmtNumber = v => new Intl.NumberFormat('en-US').format(v);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTable();
+      updateChartCard();
+      initChart();
+      setupEvents();
+    });
+
+    function renderTable(query = '') {
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '';
+
+      let items = dataset.filter(c => c.name.toLowerCase().includes(query.toLowerCase()) || c.symbol.toLowerCase().includes(query.toLowerCase()));
+      if (filterTab === 'wishlist') items = items.filter(c => wishlist.includes(c.id));
+
+      document.getElementById('favCount').innerText = wishlist.length;
+
+      items.forEach(coin => {
+        const isFav = wishlist.includes(coin.id);
+        const tr = document.createElement('tr');
+        if (coin.id === selectedCoin.id) tr.className = 'selected';
+        
+        tr.onclick = (e) => {
+          if (!e.target.classList.contains('star-icon')) {
+            selectedCoin = coin;
+            renderTable(document.getElementById('searchInput').value);
+            updateChartCard();
+            updateChartData();
+          }
+        };
+
+        tr.innerHTML = `
+          <td>
+            <i class="fa-${isFav ? 'solid' : 'regular'} fa-star star-icon ${isFav ? 'active' : ''}" onclick="toggleFav('${coin.id}')"></i>
+            ${coin.market_cap_rank}
+          </td>
+          <td>
+            <div class="coin-cell">
+              <img src="${coin.image}" alt="">
+              <span>${coin.name}</span>
+            </div>
+          </td>
+          <td>${fmtPrice(coin.current_price)}</td>
+          <td>$${fmtNumber(coin.market_cap)}</td>
+          <td class="${coin.price_change_percentage_24h >= 0 ? 'positive' : 'negative'}">
+            ${coin.price_change_percentage_24h.toFixed(2)}%
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function toggleFav(id) {
+      wishlist = wishlist.includes(id) ? wishlist.filter(item => item !== id) : [...wishlist, id];
+      localStorage.setItem('wishlist_items', JSON.stringify(wishlist));
+      renderTable(document.getElementById('searchInput').value);
+    }
+
+    function updateChartCard() {
+      document.getElementById('cIcon').src = selectedCoin.image;
+      document.getElementById('cName').innerText = `${selectedCoin.name} (${selectedCoin.symbol.toUpperCase()})`;
+      document.getElementById('cPrice').innerText = fmtPrice(selectedCoin.current_price);
+      const chg = document.getElementById('cChange');
+      chg.innerText = `${selectedCoin.price_change_percentage_24h.toFixed(2)}%`;
+      chg.className = selectedCoin.price_change_percentage_24h >= 0 ? 'positive' : 'negative';
+    }
+
+    function genChartData(price, range) {
+      const points = range === '24H' ? 24 : range === '1W' ? 7 : 30;
+      const labels = Array.from({length: points}, (_, i) => `${range === '24H' ? i + ':00' : 'Day ' + (i+1)}`);
+      let val = price * 0.95;
+      const data = labels.map((_, i) => (i === points - 1 ? price : val += (Math.random() - 0.47) * (price * 0.02)));
+      return { labels, data };
+    }
+
+    function initChart() {
+      const ctx = document.getElementById('mainChart').getContext('2d');
+      const mock = genChartData(selectedCoin.current_price, activeTimeframe);
+
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: mock.labels,
+          datasets: [{
+            data: mock.data,
+            borderColor: selectedCoin.price_change_percentage_24h >= 0 ? '#10b981' : '#ef4444',
+            borderWidth: 2,
+            tension: 0.3,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#64748b' } },
+            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } }
+          }
+        }
+      });
+    }
+
+    function updateChartData() {
+      const mock = genChartData(selectedCoin.current_price, activeTimeframe);
+      chartInstance.data.labels = mock.labels;
+      chartInstance.data.datasets[0].data = mock.data;
+      chartInstance.data.datasets[0].borderColor = selectedCoin.price_change_percentage_24h >= 0 ? '#10b981' : '#ef4444';
+      chartInstance.update();
+    }
+
+    function setupEvents() {
+      document.getElementById('searchInput').addEventListener('input', e => renderTable(e.target.value));
+
+      document.getElementById('tabAll').onclick = e => {
+        filterTab = 'all';
+        document.getElementById('tabWishlist').classList.remove('active');
+        e.target.classList.add('active');
+        renderTable();
+      };
+
+      document.getElementById('tabWishlist').onclick = e => {
+        filterTab = 'wishlist';
+        document.getElementById('tabAll').classList.remove('active');
+        e.target.classList.add('active');
+        renderTable();
+      };
+
+      document.querySelectorAll('.time-btn').forEach(btn => {
+        btn.onclick = e => {
+          document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+          e.target.classList.add('active');
+          activeTimeframe = e.target.dataset.time;
+          updateChartData();
+        };
+      });
+
+      document.getElementById('themeToggle').onclick = () => {
+        const html = document.documentElement;
+        const current = html.getAttribute('data-theme');
+        html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+      };
+    }
+  </script>
+</body>
+</html>
