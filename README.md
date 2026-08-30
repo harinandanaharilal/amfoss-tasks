@@ -32,13 +32,13 @@ My statistics is as shown :
 | :-:       | :-:         | :-:    |
 | Task-00   | [Install Linux/homebrew for Mac](https://github.com/harinandanaharilal/amfoss-tasks/tree/c6cde1d83f5126902d152f654940e74bd6169c48/Task00) | Completed |
 | Task-01   | [Prologue – The Logbook of the Grand Line](https://github.com/harinandanaharilal/amfoss-tasks/tree/7877131992414c321c7426c54dc4a2f4d0ffae62/Task01) | Completed |
-| Task-02   | [The Grand Line Restoration Initiative]() | Not attempted |
+| Task-02   | [The Grand Line Restoration Initiative]() | Attempted |
 | Task-03   | [Leetcode Challenge](https://github.com/harinandanaharilal/amfoss-tasks/tree/ba8b7d31a0c48f055fa3bcbb8bd2f91514082cfd/Task03) | Completed |
 | Task-04   | [The Bull & The Bear](https://github.com/harinandanaharilal/amfoss-tasks/tree/ba8b7d31a0c48f055fa3bcbb8bd2f91514082cfd/Task%2004)  | Completed|
 | Task-05   | [Grand Line Guardian]() | Not attempted |
 | Task-06   | [Pirate King's Scheduler](https://github.com/harinandanaharilal/amfoss-tasks/tree/295d3864c42cda66009cb5efb480872a6e65ef5f/task%2006) | Completed |
-| Task-07   | [Dank Memer Discord Bot]() | Not attempted |
-| Task-08   | [Operation Pixel Merge]() | Not attempted |
+| Task-07   | [Dank Memer Discord Bot]() | Completed |
+| Task-08   | [Operation Pixel Merge](https://github.com/harinandanaharilal/amfoss-tasks/tree/d2c9f5a22664a8eec565a1611efced0babd0a84d/task%2008/transmission_fragments) | Completed |
 | Task-09   | [Matrix Multiplication Showdown]()| Not attempted |
 | Task-10   | [Image Grid App]()| Not attempted |
 | Task-11   | [Surprise Us]()| Not attempted |
