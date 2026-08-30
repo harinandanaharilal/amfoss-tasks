@@ -34,7 +34,7 @@ My statistics is as shown :
 | Task-01   | [Prologue – The Logbook of the Grand Line](https://github.com/harinandanaharilal/amfoss-tasks/tree/7877131992414c321c7426c54dc4a2f4d0ffae62/Task01) | Completed |
 | Task-02   | [The Grand Line Restoration Initiative]() | Not attempted |
 | Task-03   | [Leetcode Challenge](https://github.com/harinandanaharilal/amfoss-tasks/tree/ba8b7d31a0c48f055fa3bcbb8bd2f91514082cfd/Task03) | Completed |
-| Task-04   | [The Bull & The Bear]()  | Not attempted|
+| Task-04   | [The Bull & The Bear](https://github.com/harinandanaharilal/amfoss-tasks/tree/ba8b7d31a0c48f055fa3bcbb8bd2f91514082cfd/Task%2004)  | Not attempted|
 | Task-05   | [Grand Line Guardian]() | Not attempted |
 | Task-06   | [Pirate King's Scheduler]() | Not attempted |
 | Task-07   | [Dank Memer Discord Bot]() | Not attempted |
