@@ -28,7 +28,7 @@ workshop .I completed level 1 on 26/07/2026.</p>
 
 # Level 4
 
-<p>Level 4 was the easiest of all ,it was to find the other fragment among in the water7 folder .i dont know if i was meant to do it this way but when i opened the file i had an option to open it using archive utility and i opened it directly and i got the text file.</p>
+<p>Level 4 was the easiest of all ,it was to find the other fragment among in the water7 folder .i dont know if i was meant to do it this way but when i opened the file i had an option to open it using archive utility and i opened it directly and i got the text file.I was unsure on whether to do it using terminal or not so since i got what i needed i just moved on to the next task</p>
 <img width="863" height="400" alt="Screenshot 2026-07-29 at 3 26 49 AM" src="https://github.com/user-attachments/assets/8533a023-c1b3-45e6-92a7-15893ad2f71d" />
 <img width="619" height="293" alt="Screenshot 2026-07-29 at 3 25 45 AM" src="https://github.com/user-attachments/assets/3f032522-91a5-40d5-a145-8b3c0d868b30" />
 
